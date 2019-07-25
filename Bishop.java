@@ -4,8 +4,8 @@ public class Bishop extends ChessPiece {
     
     private boolean firstMove = true;
     
-	public Bishop(Player player) {
-		super(player);
+	public Bishop(Player player, ChessModel model) {
+		super(player, model);
 	}
 
 	public String type() {

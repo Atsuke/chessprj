@@ -4,9 +4,9 @@ public class Rook extends ChessPiece {
 
     private boolean firstMove= true;
     
-	public Rook(Player player) {
+	public Rook(Player player, ChessModel model) {
 		
-		super(player);
+		super(player, model);
 		
 	}
 

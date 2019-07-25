@@ -3,8 +3,8 @@ package chessprj;
 public class Pawn extends ChessPiece {
     
 
-	public Pawn(Player player) {
-		super(player, model.getModel());
+	public Pawn(Player player, ChessModel model) {
+		super(player, model);
 	}//end Constructor
 
 	public String type() {

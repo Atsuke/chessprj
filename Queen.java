@@ -3,8 +3,8 @@ package chessprj;
 public class Queen extends ChessPiece {
 
     private boolean firstMove = true;
-	public Queen(Player player) {
-		super(player);
+	public Queen(Player player, ChessModel model) {
+		super(player, model);
 
 	}
 
@@ -18,8 +18,8 @@ public class Queen extends ChessPiece {
         }//endsetFirstMove
         
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
-		Bishop move1 = new Bishop(board[move.fromRow][move.fromColumn].player());
-		Rook move2 = new Rook(board[move.fromRow][move.fromColumn].player());
+		Bishop move1 = new Bishop(board[move.fromRow][move.fromColumn].player(),model);
+		Rook move2 = new Rook(board[move.fromRow][move.fromColumn].player(),model);
 		return (move1.isValidMove(move, board) || move2.isValidMove(move, board));
 	}
 }

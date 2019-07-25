@@ -3,7 +3,7 @@ package chessprj;
 public abstract class ChessPiece implements IChessPiece {
 
         private Player owner;
-        protected ChessModel model;
+        protected static ChessModel model;
         boolean firstMove = true;
         
 	protected ChessPiece(Player player, ChessModel model) {

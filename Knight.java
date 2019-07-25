@@ -4,8 +4,8 @@ public class Knight extends ChessPiece {
 
     private boolean firstMove = true;
     
-	public Knight(Player player) {
-		super(player);
+	public Knight(Player player, ChessModel model) {
+		super(player,model);
 	}
 
 	public String type() {

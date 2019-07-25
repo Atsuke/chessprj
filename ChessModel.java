@@ -19,28 +19,28 @@ public class ChessModel implements IChessModel {
                 undoStack = new Stack<IChessPiece[][]>();
                 
 
-        board[7][0] = new Rook(Player.WHITE);
-        board[7][1] = new Knight(Player.WHITE);
-        board[7][2] = new Bishop(Player.WHITE);
-        board[7][3] = new Queen(Player.WHITE);
+        board[7][0] = new Rook(Player.WHITE,this);
+        board[7][1] = new Knight(Player.WHITE,this);
+        board[7][2] = new Bishop(Player.WHITE,this);
+        board[7][3] = new Queen(Player.WHITE,this);
         board[7][4] = new King(Player.WHITE,this);
-        board[7][5] = new Bishop(Player.WHITE);
-        board[7][6] = new Knight (Player.WHITE);
-        board[7][7] = new Rook(Player.WHITE);
+        board[7][5] = new Bishop(Player.WHITE,this);
+        board[7][6] = new Knight (Player.WHITE,this);
+        board[7][7] = new Rook(Player.WHITE,this);
         for(int i=0; i<8; i++){
-            board[6][i] = new Pawn(Player.WHITE);
+            board[6][i] = new Pawn(Player.WHITE,this);
         }//end for
         
-        board[0][0] = new Rook(Player.BLACK);
-        board[0][1] = new Knight(Player.BLACK);
-        board[0][2] = new Bishop(Player.BLACK);
-        board[0][3] = new Queen(Player.BLACK);
+        board[0][0] = new Rook(Player.BLACK,this);
+        board[0][1] = new Knight(Player.BLACK,this);
+        board[0][2] = new Bishop(Player.BLACK,this);
+        board[0][3] = new Queen(Player.BLACK,this);
         board[0][4] = new King(Player.BLACK,this);
-        board[0][5] = new Bishop(Player.BLACK);
-        board[0][6] = new Knight (Player.BLACK);
-        board[0][7] = new Rook(Player.BLACK);
+        board[0][5] = new Bishop(Player.BLACK,this);
+        board[0][6] = new Knight (Player.BLACK,this);
+        board[0][7] = new Rook(Player.BLACK,this);
         for(int i=0; i<8; i++){
-            board[1][i] = new Pawn(Player.BLACK);
+            board[1][i] = new Pawn(Player.BLACK,this);
         }//end for
 	}//end chessModel
 
