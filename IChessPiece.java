@@ -17,6 +17,12 @@ public interface IChessPiece {
 	 * @return the type of this piece
 	 */
 	String type();
+        
+         IChessPiece copy();
+         
+         
+            
+         
 
 	/**
 	 * Returns whether the piece at location {@code [move.fromRow, move.fromColumn]} is allowed to move to location

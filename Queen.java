@@ -17,6 +17,13 @@ public class Queen extends ChessPiece {
             
         }//endsetFirstMove
         
+        @Override
+        public IChessPiece copy(){
+            Queen copy = new Queen(player(), model);
+            copy.setFirstMove(firstMove);
+            return copy;
+        }
+        
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
 		Bishop move1 = new Bishop(board[move.fromRow][move.fromColumn].player(),model);
 		Rook move2 = new Rook(board[move.fromRow][move.fromColumn].player(),model);

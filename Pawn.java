@@ -4,18 +4,29 @@ public class Pawn extends ChessPiece {
     
 
 	public Pawn(Player player, ChessModel model) {
-		super(player, model);
+		
+            super(player, model);
+                
 	}//end Constructor
 
 	public String type() {
-		return "Pawn";
-	}//end type
+		
+            return "Pawn";
+	
+        }//end type
         
         public void setFirstMove(boolean first){
+            
             firstMove = first;
             
         }//endsetFirstMove
         
+        @Override
+        public IChessPiece copy(){
+            Pawn copy = new Pawn(player(), model);
+            copy.setFirstMove(firstMove);
+            return copy;
+        }
         
 	// determines if the move is valid for a pawn piece
 	public boolean isValidMove(Move move, IChessPiece[][] board) {

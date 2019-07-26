@@ -17,6 +17,14 @@ public class Bishop extends ChessPiece {
             
         }//endsetFirstMove
         
+        @Override
+        public IChessPiece copy(){
+            Bishop copy = new Bishop(player(), model);
+            copy.setFirstMove(firstMove);
+            return copy;
+        }
+        
+        
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
             boolean valid = false;
            
@@ -24,9 +32,7 @@ public class Bishop extends ChessPiece {
            if(Math.abs(move.fromRow-move.toRow)== Math.abs(move.fromColumn - move.toColumn)){
                 int tempCol;
                 int tempRow;
-               
-
-               
+              
              //check that destination is empty or not occupied by same team
              if(board[move.toRow][move.toColumn] == null || board[move.toRow][move.toColumn].player()!= player()){
               
@@ -110,4 +116,5 @@ public class Bishop extends ChessPiece {
         
 		
 	}//end isValidMove
+        
 }//end Class Bishop

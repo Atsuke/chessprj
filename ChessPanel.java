@@ -213,20 +213,25 @@ public class ChessPanel extends JPanel {
 
     public void undo(){
          model.undo();
+         model.resetBlack();
+         model.resetWhite();
+         model.checkAllBlackMoves();
+         model.checkAllWhiteMoves();
     }
     
     // inner class that represents action listener for buttons
     private class listener implements ActionListener {
         public void actionPerformed(ActionEvent event) {
+            model.checkAllBlackMoves();
+            model.checkAllWhiteMoves();
             if(event.getSource()== undo){
                 undo();
                 displayBoard();
                 
-            }
+            }//end if
             else
-            model.checkAllBlackMoves();
-            model.checkAllWhiteMoves();
-                                
+            
+                        
             for (int r = 0; r < model.numRows(); r++)
                 for (int c = 0; c < model.numColumns(); c++)
                     if (board[r][c] == event.getSource())
@@ -244,10 +249,14 @@ public class ChessPanel extends JPanel {
                                 model.copy();
                                 model.move(m);
                                 displayBoard();
-                                model.resetBlack();
-                                model.resetWhite();
+                                
+                                
                             }//end if
+                            
                         }//end else
+                        model.resetBlack();
+                        model.resetWhite();
         }//end actionPerformed
+        
     }//end Class listener
 }//end Class Chess Panel

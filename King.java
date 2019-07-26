@@ -19,6 +19,13 @@ public class King extends ChessPiece {
             
         }//endsetFirstMove
         
+        @Override
+        public IChessPiece copy(){
+            King copy = new King(player(), model);
+            copy.setFirstMove(firstMove);
+            return copy;
+        }
+        
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
             
 		boolean valid = false;
@@ -56,29 +63,45 @@ public class King extends ChessPiece {
                 //down and right one square
                 if(move.toRow == move.fromRow +1 && move.toColumn == move.fromColumn +1)
                     valid = true;
-                
-            }//end if
                
-               if(player() == Player.WHITE){
+                
+                if(player() == Player.WHITE){
                   
                    for(Move checkMe: model.blackMoves()){
                        if(move.toRow == checkMe.toRow && move.toColumn == checkMe.toColumn){
                            valid = false;
-                        }
-                    }
+                        }//end if
+                    }//end for
                   
-               } 
+               }//end if 
                 
                if(player() == Player.BLACK){
                  
                    for(Move checkMe: model.whiteMoves()){
+                       if(model.pieceAt(checkMe.fromRow, checkMe.fromColumn).type().equals("Pawn")){
+                           
+                       if(move.toRow == checkMe.fromRow-1 && move.toColumn == checkMe.fromColumn-1){
+                            valid = false;
+                       }
+                       
+                       if(move.toRow == checkMe.fromRow-1 && move.toColumn == checkMe.fromColumn +1){
+                            valid = false;
+                       }
+                       
+                       }//end if
+                           else
                        if(move.toRow == checkMe.toRow && move.toColumn == checkMe.toColumn){
                            valid = false;
                            
-                        }
-                    }
+                        }//end if
+                    }//end for
                   
-               }
+               }//end if
+                
+                
+            }//end if
+               
+               
                
 		return valid;
 	}//end isValidMove

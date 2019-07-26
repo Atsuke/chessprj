@@ -99,10 +99,12 @@ public class ChessModel implements IChessModel {
             board2 = new IChessPiece[8][8];
             for(int x = 0; x < numRows(); x++){
                 for(int y = 0; y < numColumns(); y++){
-                    board2[x][y] = board[x][y] ;
+                    if(pieceAt(x,y)!= null)
+                    board2[x][y] = pieceAt(x,y).copy();
                 }//end inner for
             
             }//end outer for
+            
              undoStack.push(board2);
             
         }//end copy

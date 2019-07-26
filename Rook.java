@@ -21,6 +21,13 @@ public class Rook extends ChessPiece {
             
         }//endsetFirstMove
         
+        @Override
+        public IChessPiece copy(){
+            Rook copy = new Rook(player(), model);
+            copy.setFirstMove(firstMove);
+            return copy;
+        }
+        
 	/**************************************************************************
          *isValidMove
          * Determines if move is valid for rook piece. up/down left/right

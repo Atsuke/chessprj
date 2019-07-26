@@ -17,6 +17,14 @@ public abstract class ChessPiece implements IChessPiece {
 		return owner;
 	}
 
+        public IChessPiece copy(){
+           
+            return this;
+            
+        }//end copy
+        
+        
+        
 	public boolean isValidMove(Move move, IChessPiece[][] board) {
 		boolean valid = false;
 

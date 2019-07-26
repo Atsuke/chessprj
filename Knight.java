@@ -17,6 +17,13 @@ public class Knight extends ChessPiece {
             
         }//endsetFirstMove
         
+        @Override
+        public IChessPiece copy(){
+            Knight copy = new Knight(player(), model);
+            copy.setFirstMove(firstMove);
+            return copy;
+        }
+        
 	public boolean isValidMove(Move move, IChessPiece[][] board){
             boolean valid = false;
             
