@@ -7,8 +7,11 @@ public class ChessModel implements IChessModel {
     private IChessPiece[][] board2;
     private ArrayList<Move> whiteMoves = new ArrayList<Move>();
     private ArrayList<Move> blackMoves = new ArrayList<Move>();
+    private ArrayList<Move> whiteThreats = new ArrayList<Move>();
+    private ArrayList<Move> blackThreats = new ArrayList<Move>();
     private Player player;
     private Stack<IChessPiece[][]> undoStack;
+    private String msg;
         
 
 	// declare other instance variables as needed
@@ -73,10 +76,33 @@ public class ChessModel implements IChessModel {
                 
 	}
 
-	public boolean inCheck(Player p) {
-		boolean valid = false;
-		return valid;
-	}
+	public boolean inCheck() {
+		boolean inCheck = false;
+                    threatChecks();
+                for(int r=0; r<numRows(); r++)
+                    for(int c = 0; c<numColumns(); c++)
+                    if(pieceAt(r,c) != null){
+                        if(pieceAt(r,c).type().equals("King")){
+                            if(pieceAt(r,c).player()==Player.BLACK){
+                              for(Move check: blackThreats)
+                                  if(check.toRow == r && check.toColumn == c){
+                                      msg = "Black King in Check";
+                                      inCheck = true;
+                                  }//end row/column check
+                                      
+                            }//end black player
+                            else if(pieceAt(r,c).player()==Player.WHITE){
+                              for(Move check: whiteThreats)
+                                  if(check.toRow == r && check.toColumn == c){
+                                      msg = "White King in Check";
+                                      inCheck = true;
+                                  }//end row/column check
+                                      
+                            }//end white player
+                        }//end king if
+                    }//end null if
+		return inCheck;
+	}//end inCheck
 
         
 	public Player currentPlayer() {
@@ -114,6 +140,7 @@ public class ChessModel implements IChessModel {
                 board = undoStack.pop();
             }
         }
+        
         public void checkAllWhiteMoves(){
             for(int i=0; i< numRows(); i++)
                 for(int j=0; j<numColumns();j++){
@@ -146,21 +173,39 @@ public class ChessModel implements IChessModel {
             }//end outer for
         }//end checkAllBlackMoves
         
-        
-        public boolean isThreatened(int row, int col){
-            boolean threatened = false;
-            for(int i=0; i< numRows(); i++){
-                for(int j=0; j<numColumns();j++){
-                    if(pieceAt(i,j)!=null && pieceAt(i,j).player()!= player){
-                     Move check = new Move(i,j,row,col);
-                     if(isValidMove(check))
-                         threatened = true;
-                    }//end if 
-                }//end inner for
-            }//end outer for
-            return threatened;
-        }//end isThreatened
-        
+        public void threatChecks(){
+        checkAllBlackMoves();
+        checkAllWhiteMoves();
+        for(Move check: whiteMoves){
+            
+            if(pieceAt(check.fromRow, check.fromColumn) != null && pieceAt(check.fromRow, check.fromColumn).type().equals("Pawn")){
+                 Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn-1);
+                 blackThreats.add(temp);
+                  Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn+1);
+                 blackThreats.add(temp2);
+               
+            }//end if
+         else if(isValidMove(check)){
+            blackThreats.add(check);
+            }//end if
+        }//end for each
+                
+        for(Move check: blackMoves){
+            
+            if(pieceAt(check.fromRow, check.fromColumn) != null && pieceAt(check.fromRow, check.fromColumn).type().equals("Pawn")){
+                 Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow +1, check.fromColumn-1);
+                 whiteThreats.add(temp);
+                  Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow +1, check.fromColumn+1);
+                 whiteThreats.add(temp2);
+               
+            }//end if
+         else if(isValidMove(check)){
+            whiteThreats.add(check);
+            }//end if
+        }//end for each
+       
+}//end threatChecks
+                
         
 	public void setNextPlayer() {
 		player = player.next();
@@ -170,6 +215,10 @@ public class ChessModel implements IChessModel {
         
             return blackMoves.size();
         }
+        
+        public String getMessage(){
+            return msg;
+        }//end getMessage
         
          public int getAllWhiteMoves(){
         
@@ -186,12 +235,25 @@ public class ChessModel implements IChessModel {
              return blackMoves;
          }
           
+          public ArrayList<Move> blackThreats(){
+         
+             return blackThreats;
+         }
+          
+          public ArrayList<Move> whiteThreats(){
+         
+             return whiteThreats;
+         }
+          
           public void resetWhite(){
               whiteMoves.clear();
+              whiteThreats.clear();
           }
+          
           
           public void resetBlack(){
               blackMoves.clear();
+              blackThreats.clear();
           }
           
 	public void setPiece(int row, int column, IChessPiece piece) {

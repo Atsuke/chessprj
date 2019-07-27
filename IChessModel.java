@@ -35,7 +35,7 @@ public interface IChessModel {
 	 * @param  p {@link W18project3.Move} the Player being checked
 	 * @return {@code true} if the current player is in check, {@code false} otherwise.
 	 */
-	boolean inCheck(Player p);
+	boolean inCheck();
 
 	/**
 	 * Return the current player.

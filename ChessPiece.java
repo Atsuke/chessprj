@@ -12,6 +12,7 @@ public abstract class ChessPiece implements IChessPiece {
 	}
 
 	public abstract String type();
+        
 
 	public Player player() {
 		return owner;
