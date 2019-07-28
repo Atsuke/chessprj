@@ -5,12 +5,13 @@ import java.util.Stack;
 public class ChessModel implements IChessModel {	 
     private IChessPiece[][] board;
     private IChessPiece[][] board2;
-    private ArrayList<Move> whiteMoves = new ArrayList<Move>();
-    private ArrayList<Move> blackMoves = new ArrayList<Move>();
-    private ArrayList<Move> whiteThreats = new ArrayList<Move>();
-    private ArrayList<Move> blackThreats = new ArrayList<Move>();
-    private Player player;
+    private ArrayList<Move> whiteMoves = new ArrayList<>();
+    private ArrayList<Move> blackMoves = new ArrayList<>();
+    private ArrayList<Move> whiteThreats = new ArrayList<>();
+    private ArrayList<Move> blackThreats = new ArrayList<>();
+    private ArrayList<ChessModel> gameOverMan = new ArrayList<>();
     private Stack<IChessPiece[][]> undoStack;
+    private Player player;
     private String msg;
         
 
@@ -48,14 +49,66 @@ public class ChessModel implements IChessModel {
 	}//end chessModel
 
 	public boolean isComplete() {
-		boolean valid = false;
-		return valid;
-	}
+            boolean over = false;
+            getAllWhiteMoves();
+            getAllBlackMoves();
+            threatChecks();
+            ChessModel temp = new ChessModel();
+            
+            if(player == Player.WHITE){
+                for(Move check: blackThreats){
+                    whiteMoves.add(check);
+                }//end for
+                
+                for(Move check: whiteMoves){
+                    over = true;
+                    temp = this.copyModel();
+                    temp.copy();
+                    temp.move(check);
+                     if(temp.inCheck()==false){
+                         over = false;
+                         break;
+                     }
+                     else{
+                         temp.undo();
+                         continue;
+                     }//end else
+                }//end for
+                if(over)
+                    msg = "GAME OVER: Black wins.";
+            }//end white if
+            
+             if(player == Player.BLACK){
+                for(Move check: whiteThreats){
+                    blackMoves.add(check);
+                }//end for
+                
+                for(Move check: blackMoves){
+                    over = true;
+                    temp = this.copyModel();
+                    temp.copy();
+                    temp.move(check);
+                     if(temp.inCheck()==false){
+                         over = false;
+                         break;
+                     }
+                     else{
+                         temp.undo();
+                         continue;
+                     }//end else
+                }//end for
+                if(over)
+                    msg = "GAME OVER: White wins.";
+            }//end black if
+
+		return over;
+	}//end isComplete
 
 
         public ChessModel getModel(){
             return this;
         }
+        
 	public boolean isValidMove(Move move) {
 		boolean valid = false;
                 
@@ -76,6 +129,19 @@ public class ChessModel implements IChessModel {
                 
 	}
 
+        public ChessModel copyModel(){
+            ChessModel tempBoard = new ChessModel();//create new temporary board
+            tempBoard.clearBoard();//delete everything on it so we can copy the real board to it
+        
+        for(int x = 0; x < numRows(); x++){
+                for(int y = 0; y < numColumns(); y++){
+                    if(pieceAt(x,y)!= null)
+                    tempBoard.setPiece(x, y, pieceAt(x,y).copy());//makes exact copy of each piece
+                }//end inner for
+            }//end outer for
+            return tempBoard;
+        }//end copyModel
+        
 	public boolean inCheck() {
 		boolean inCheck = false;
                     threatChecks();
@@ -117,6 +183,15 @@ public class ChessModel implements IChessModel {
 		return 8;
 	}
 
+        private void clearBoard(){
+            for(int x = 0; x < numRows(); x++){
+                for(int y = 0; y < numColumns(); y++){
+                    setPiece(x,y,null);
+                }
+            }
+        
+        }//end clear board
+        
 	public IChessPiece pieceAt(int row, int column) {		
 		return board[row][column];
 	}
@@ -167,7 +242,7 @@ public class ChessModel implements IChessModel {
                                    blackMoves.add(check);
                                }//end if
                             }//end inner inner for
-                    }//end outerfor
+                        }//end outerfor
                     }//end if 
                 }//end inner for
             }//end outer for
@@ -179,11 +254,14 @@ public class ChessModel implements IChessModel {
         for(Move check: whiteMoves){
             
             if(pieceAt(check.fromRow, check.fromColumn) != null && pieceAt(check.fromRow, check.fromColumn).type().equals("Pawn")){
-                 Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn-1);
+                if(check.fromRow-1 > 0 && check.fromColumn-1>0){
+                 Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn -1);
                  blackThreats.add(temp);
-                  Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn+1);
+                }
+                if(check.fromRow-1 > 0 && check.fromColumn+1 < numColumns()){
+                  Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn +1);
                  blackThreats.add(temp2);
-               
+                }
             }//end if
          else if(isValidMove(check)){
             blackThreats.add(check);
@@ -193,11 +271,14 @@ public class ChessModel implements IChessModel {
         for(Move check: blackMoves){
             
             if(pieceAt(check.fromRow, check.fromColumn) != null && pieceAt(check.fromRow, check.fromColumn).type().equals("Pawn")){
+                if(check.fromRow +1 < numRows() && check.fromColumn-1 > 0){
                  Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow +1, check.fromColumn-1);
                  whiteThreats.add(temp);
-                  Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow +1, check.fromColumn+1);
+                }
+                if(check.fromRow +1 < numRows() && check.fromColumn +1 < numRows()){
+                  Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow +1, check.fromColumn +1);
                  whiteThreats.add(temp2);
-               
+                }
             }//end if
          else if(isValidMove(check)){
             whiteThreats.add(check);

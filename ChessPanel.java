@@ -220,11 +220,13 @@ public class ChessPanel extends JPanel {
     }//end undo
     
     public void inCheck(){
-        if(model.inCheck() == true)
-           // JOptionPane.showInputDialog(model.getMessage());
+        if(model.inCheck()){
             JOptionPane.showMessageDialog(toggle, model.getMessage());
+        }
+        if(model.isComplete()){
+            JOptionPane.showMessageDialog(toggle, model.getMessage());
+        }
     }
-    
     // inner class that represents action listener for buttons
     private class listener implements ActionListener {
         public void actionPerformed(ActionEvent event) {

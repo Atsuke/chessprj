@@ -29,7 +29,7 @@ public class Bishop extends ChessPiece {
             boolean valid = false;
            
             //Move in diagonal lines only
-           if(Math.abs(move.fromRow-move.toRow)== Math.abs(move.fromColumn - move.toColumn)){
+           if(Math.abs(move.fromRow - move.toRow)== Math.abs(move.fromColumn - move.toColumn)){
                 int tempCol;
                 int tempRow;
               
@@ -66,8 +66,7 @@ public class Bishop extends ChessPiece {
                    if(board[tempRow][tempCol] != null){
                        valid = false;
                        break;
-                   }//end if
-                   
+                   }//end if                   
                    tempCol++;
                    tempRow--;
                }//end While
