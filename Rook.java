@@ -2,7 +2,7 @@ package chessprj;
 
 public class Rook extends ChessPiece {
 
-    private boolean firstMove= true;
+    private int strategicValue = 5;
     
 	public Rook(Player player, ChessModel model) {
 		

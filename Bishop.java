@@ -2,8 +2,9 @@ package chessprj;
 
 public class Bishop extends ChessPiece {
     
-    private boolean firstMove = true;
     
+        private int strategicValue = 3;
+        
 	public Bishop(Player player, ChessModel model) {
 		super(player, model);
 	}

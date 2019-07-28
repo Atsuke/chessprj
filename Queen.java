@@ -2,7 +2,8 @@ package chessprj;
 
 public class Queen extends ChessPiece {
 
-    private boolean firstMove = true;
+    private int strategicValue = 9;
+    
 	public Queen(Player player, ChessModel model) {
 		super(player, model);
 
