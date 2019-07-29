@@ -19,6 +19,8 @@ public class ChessModel implements IChessModel {
     private Stack<IChessPiece[][]> undoStack;
     private Player player;
     private String msg;
+    private boolean blackInCheck;
+    private int kingRow, kingCol;
 
     public ChessModel() {
         board = new IChessPiece[8][8];
@@ -188,6 +190,8 @@ public class ChessModel implements IChessModel {
 
     public boolean inCheck() {
         boolean inCheck = false;
+        blackInCheck = false;
+
         threatChecks();
         for(int r=0; r<numRows(); r++)
             for(int c = 0; c<numColumns(); c++)
@@ -198,6 +202,9 @@ public class ChessModel implements IChessModel {
                                 if(check.toRow == r && check.toColumn == c){
                                     msg = "Black King in Check";
                                     inCheck = true;
+                                    blackInCheck = true;
+                                    kingCol = c;
+                                    kingRow = r;
                                 }//end row/column check
 
                         }//end black player
@@ -207,13 +214,11 @@ public class ChessModel implements IChessModel {
                                     msg = "White King in Check";
                                     inCheck = true;
                                 }//end row/column check
-
                         }//end white player
                     }//end king if
                 }//end null if
         return inCheck;
     }//end inCheck
-
 
     public Player currentPlayer() {
         return player;
@@ -446,22 +451,46 @@ public class ChessModel implements IChessModel {
     }
 
     public void AI() {
+
         /*
          * Write a simple AI set of rules in the following order.
          * a. Check to see if you are in check.
          * 		i. If so, get out of check by moving the king or placing a piece to block the check
-         *
-         * b. Attempt to put opponent into check (or checkmate).
+         */
+
+        // checks if black king is in check
+//        if(blackInCheck){
+//
+//            // iterates through rows around king
+//            for(int r = kingRow - 1; r < kingRow + 2; ++r){
+//
+//                // iterates through columns around king
+//                for(int c = kingCol - 1; c < kingCol + 2; ++c){
+//
+//                    Move temp = new Move(kingRow, kingCol, r, c);
+//
+//                    isValidMove(temp);
+//
+//                }
+//            }
+//        }
+
+         /* b. Attempt to put opponent into check (or checkmate).
          * 		i. Attempt to put opponent into check without losing your piece
          *		ii. Perhaps you have won the game.
-         *
-         *c. Determine if any of your pieces are in danger,
+         */
+
+         /*c. Determine if any of your pieces are in danger,
          *		i. Move them if you can.
          *		ii. Attempt to protect that piece.
-         *
-         *d. Move a piece (pawns first) forward toward opponent king
+         */
+
+         /*d. Move a piece (pawns first) forward toward opponent king
          *		i. check to see if that piece is in danger of being removed, if so, move a different piece.
          */
+
+
+
 
     }
 }

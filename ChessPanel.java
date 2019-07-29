@@ -294,10 +294,13 @@ public class ChessPanel extends JPanel {
 
                                 //check valid moves here
                                 if ((model.isValidMove(m))) {
+
                                     model.copy();
                                     model.move(m);
                                     displayBoard();
                                     inCheck();
+
+                                    model.AI();
 
                                 }//end if
 
