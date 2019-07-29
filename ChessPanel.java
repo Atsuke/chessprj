@@ -300,6 +300,8 @@ public class ChessPanel extends JPanel {
                                     displayBoard();
                                     inCheck();
 
+                                    // calls for AI after each move
+                                    // still need to implement turn taking
                                     model.AI();
 
                                 }//end if

@@ -1,5 +1,7 @@
 package chessprj;
 
+import java.util.ArrayList;
+
 /**********************************************************************
  * Houses information about the Pawn chess piece
  **********************************************************************/
@@ -110,6 +112,5 @@ public class Pawn extends ChessPiece {
         return valid;
 
     }//end isValidMove
-
 
 }//end Class Pawn

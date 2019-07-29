@@ -242,6 +242,9 @@ public class ChessModel implements IChessModel {
 
     }//end clear board
 
+    /**********************************************************************
+     * @return chess piece
+     **********************************************************************/
     public IChessPiece pieceAt(int row, int column) {
         return board[row][column];
     }
@@ -418,7 +421,6 @@ public class ChessModel implements IChessModel {
         return blackThreats;
     }
 
-
     /**********************************************************************
      * Resets white moves and threats
      **********************************************************************/
@@ -471,6 +473,9 @@ public class ChessModel implements IChessModel {
      **********************************************************************/
     public void AI() {
 
+        // temporary test to make sure AI is getting called after each move
+        System.out.println("test");
+
         /*******************************************************
          * Write a simple AI set of rules in the following order.
          * a. Check to see if you are in check.
@@ -517,12 +522,50 @@ public class ChessModel implements IChessModel {
          *		ii. Attempt to protect that piece.
          ********************************************************/
 
+         // should this also only execute if black king is not in check?
+
          // assesses if any black pieces are in danger
          if(!blackThreats.isEmpty()){
 
-             // temporarily stores how many black threats there are
-             int tempSize = blackThreats.size();
+             // gets whatever threatening move is first in list
+             Move threat = blackThreats.get(0);
 
+             // gets whatever piece is in the threatened spot
+
+             // finding location of the threatened piece
+             int pieceRow = threat.toRow;
+             int pieceCol = threat.toColumn;
+
+             // NOW need to attempt to move that piece...
+
+             // an array list of potential moves
+             ArrayList<Move> potentialMoves = new ArrayList<Move>();
+
+             // iterate through all possible black moves
+             for(Move move : blackMoves){
+
+                 // finds all potential moves for the piece we are at
+                 if(move.fromRow == pieceRow && move.fromColumn == pieceCol){
+
+                     // adds all moves for piece we're at to potential moves arraylist
+                     potentialMoves.add(move);
+                 }
+             }
+
+             // now for all potential moves we need to see if they are valid
+             for(Move move : potentialMoves){
+                 if(isValidMove(move)){
+
+                     // executes the move
+                     this.move(move);
+
+                     // break out of loop if a move is executed
+                     break;
+
+                     // this doesn't account for if this move is actually going to keep it out of
+                     // danger or not (yet)
+                 }
+             }
 
          }
 

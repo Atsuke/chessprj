@@ -1,5 +1,7 @@
 package chessprj;
 
+import java.util.ArrayList;
+
 /**********************************************************************
  * Houses information about the Queen chess piece
  **********************************************************************/
@@ -33,4 +35,5 @@ public class Queen extends ChessPiece {
         Rook move2 = new Rook(board[move.fromRow][move.fromColumn].player(),model);
         return (move1.isValidMove(move, board) || move2.isValidMove(move, board));
     }
+
 }

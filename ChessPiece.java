@@ -1,5 +1,7 @@
 package chessprj;
 
+import java.util.ArrayList;
+
 public abstract class ChessPiece implements IChessPiece {
 
     private Player owner;
@@ -32,4 +34,5 @@ public abstract class ChessPiece implements IChessPiece {
 
     // abstracted due to the uniqueness of this method for each piece
     public abstract boolean isValidMove(Move move, IChessPiece[][] board);
+
 }

@@ -1,5 +1,7 @@
 package chessprj;
 
+import java.util.ArrayList;
+
 /**********************************************************************
  * Houses information about the Rook chess piece
  **********************************************************************/
