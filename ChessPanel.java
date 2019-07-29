@@ -4,6 +4,10 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/**********************************************************************
+ * Creates the essentials for our GUI
+ * Creates board and buttons that are implemented throughout game
+ **********************************************************************/
 
 public class ChessPanel extends JPanel {
 
@@ -11,15 +15,16 @@ public class ChessPanel extends JPanel {
     private JButton undo;
     private ChessModel model;
     private JToggleButton toggle;
-    
 
+    /** white icons */
     private ImageIcon wRook;
     private ImageIcon wBishop;
     private ImageIcon wQueen;
     private ImageIcon wKing;
     private ImageIcon wPawn;
     private ImageIcon wKnight;
-    
+
+    /** black icons */
     private ImageIcon bRook;
     private ImageIcon bBishop;
     private ImageIcon bQueen;
@@ -32,7 +37,6 @@ public class ChessPanel extends JPanel {
     private int toRow;
     private int fromCol;
     private int toCol;
-    // declare other intance variables as needed
 
     private listener listener;
 
@@ -48,6 +52,7 @@ public class ChessPanel extends JPanel {
         JPanel buttonpanel = new JPanel();
         boardpanel.setLayout(new GridLayout(model.numRows(), model.numColumns(), 1, 1));
 
+        // creates the board of buttons
         for (int r = 0; r < model.numRows(); r++) {
             for (int c = 0; c < model.numColumns(); c++) {
                 if (model.pieceAt(r, c) == null) {
@@ -59,11 +64,12 @@ public class ChessPanel extends JPanel {
                     placeWhitePieces(r, c);
 
                 setBackGroundColor(r, c);
+
                 boardpanel.add(board[r][c]);
             }//end inner for
         }//end outer for
-        
-        
+
+        // adds the board and buttons
         add(boardpanel, BorderLayout.WEST);
         boardpanel.setPreferredSize(new Dimension(600, 600));
         buttonpanel.setLayout(new GridLayout(2,1));
@@ -71,11 +77,13 @@ public class ChessPanel extends JPanel {
         buttonpanel.add(toggle);
         buttonpanel.add(undo);
         undo.addActionListener(listener);
-        
+
         firstTurnFlag = true;
-        
     }
 
+    /**********************************************************************
+     * Setter for background colors
+     **********************************************************************/
     private void setBackGroundColor(int r, int c) {
         if ((c % 2 == 1 && r % 2 == 0) || (c % 2 == 0 && r % 2 == 1)) {
             board[r][c].setBackground(Color.LIGHT_GRAY);
@@ -84,6 +92,12 @@ public class ChessPanel extends JPanel {
         }
     }
 
+    /**********************************************************************
+     * Places initial white pieces
+     *
+     * @param r - row
+     * @param c - column
+     **********************************************************************/
     private void placeWhitePieces(int r, int c) {
         if (model.pieceAt(r, c).type().equals("Pawn")) {
             board[r][c] = new JButton(null, wPawn);
@@ -110,7 +124,13 @@ public class ChessPanel extends JPanel {
             board[r][c].addActionListener(listener);
         }
     }//end placeWhitePieces
-    
+
+    /**********************************************************************
+     * Places initial black pieces
+     *
+     * @param r - row
+     * @param c - column
+     **********************************************************************/
     private void placeBlackPieces(int r, int c) {
         if (model.pieceAt(r, c).type().equals("Pawn")) {
             board[r][c] = new JButton(null, bPawn);
@@ -138,6 +158,9 @@ public class ChessPanel extends JPanel {
         }
     }//end placeBlackPieces
 
+    /**********************************************************************
+     * Sets image icons for all pieces
+     **********************************************************************/
     private void createIcons() {
         // Sets the Image for white player pieces
         wRook = new ImageIcon("./src/images/wRook.png");
@@ -146,7 +169,7 @@ public class ChessPanel extends JPanel {
         wKing = new ImageIcon("./src/images/wKing.png");
         wPawn = new ImageIcon("./src/images/wPawn.png");
         wKnight = new ImageIcon("./src/images/wKnight.png");
-        
+
         // Sets the Image for black player pieces
         bRook = new ImageIcon("./src/images/bRook.png");
         bBishop = new ImageIcon("./src/images/bBishop.png");
@@ -156,69 +179,81 @@ public class ChessPanel extends JPanel {
         bKnight = new ImageIcon("./src/images/bKnight.png");
     }
 
-    // method that updates the board
+    /**********************************************************************
+     * Updates board
+     **********************************************************************/
     private void displayBoard() {
 
+        // iterates through board
         for (int r = 0; r < 8; r++) {
             for (int c = 0; c < 8; c++)
+
                 if (model.pieceAt(r, c) == null)//no piece here
                     board[r][c].setIcon(null);
+
                 else//piece is white
-                if (model.pieceAt(r, c).player() == Player.WHITE) {
-                    if (model.pieceAt(r, c).type().equals("Pawn"))
-                        board[r][c].setIcon(wPawn);
 
-                    if (model.pieceAt(r, c).type().equals("Rook"))
-                        board[r][c].setIcon(wRook);
+                    if (model.pieceAt(r, c).player() == Player.WHITE) {
+                        if (model.pieceAt(r, c).type().equals("Pawn"))
+                            board[r][c].setIcon(wPawn);
 
-                    if (model.pieceAt(r, c).type().equals("Knight"))
-                        board[r][c].setIcon(wKnight);
+                        if (model.pieceAt(r, c).type().equals("Rook"))
+                            board[r][c].setIcon(wRook);
 
-                    if (model.pieceAt(r, c).type().equals("Bishop"))
-                        board[r][c].setIcon(wBishop);
+                        if (model.pieceAt(r, c).type().equals("Knight"))
+                            board[r][c].setIcon(wKnight);
 
-                    if (model.pieceAt(r, c).type().equals("Queen"))
-                        board[r][c].setIcon(wQueen);
+                        if (model.pieceAt(r, c).type().equals("Bishop"))
+                            board[r][c].setIcon(wBishop);
 
-                    if (model.pieceAt(r, c).type().equals("King"))
-                        board[r][c].setIcon(wKing);
+                        if (model.pieceAt(r, c).type().equals("Queen"))
+                            board[r][c].setIcon(wQueen);
 
-                }//end white If
-                
-            else//piece is black
-                if (model.pieceAt(r, c).player() == Player.BLACK) {
-                    if (model.pieceAt(r, c).type().equals("Pawn"))
-                        board[r][c].setIcon(bPawn);
+                        if (model.pieceAt(r, c).type().equals("King"))
+                            board[r][c].setIcon(wKing);
 
-                    if (model.pieceAt(r, c).type().equals("Rook"))
-                        board[r][c].setIcon(bRook);
+                    }//end white If
 
-                    if (model.pieceAt(r, c).type().equals("Knight"))
-                        board[r][c].setIcon(bKnight);
+                    else//piece is black
+                        if (model.pieceAt(r, c).player() == Player.BLACK) {
+                            if (model.pieceAt(r, c).type().equals("Pawn"))
+                                board[r][c].setIcon(bPawn);
 
-                    if (model.pieceAt(r, c).type().equals("Bishop"))
-                        board[r][c].setIcon(bBishop);
+                            if (model.pieceAt(r, c).type().equals("Rook"))
+                                board[r][c].setIcon(bRook);
 
-                    if (model.pieceAt(r, c).type().equals("Queen"))
-                        board[r][c].setIcon(bQueen);
+                            if (model.pieceAt(r, c).type().equals("Knight"))
+                                board[r][c].setIcon(bKnight);
 
-                    if (model.pieceAt(r, c).type().equals("King"))
-                        board[r][c].setIcon(bKing);
+                            if (model.pieceAt(r, c).type().equals("Bishop"))
+                                board[r][c].setIcon(bBishop);
 
-                }//end black If
-            
+                            if (model.pieceAt(r, c).type().equals("Queen"))
+                                board[r][c].setIcon(bQueen);
+
+                            if (model.pieceAt(r, c).type().equals("King"))
+                                board[r][c].setIcon(bKing);
+
+                        }//end black If
+
         }//end outer for
         repaint();
     }//end displayBoard
 
+    /**********************************************************************
+     * Undo move
+     **********************************************************************/
     public void undo(){
-         model.undo();
-         model.resetBlack();
-         model.resetWhite();
-         model.checkAllBlackMoves();
-         model.checkAllWhiteMoves();
+        model.undo();
+        model.resetBlack();
+        model.resetWhite();
+        model.checkAllBlackMoves();
+        model.checkAllWhiteMoves();
     }//end undo
-    
+
+    /**********************************************************************
+     * Displays message if in check (or has won)
+     **********************************************************************/
     public void inCheck(){
         if(model.inCheck()){
             JOptionPane.showMessageDialog(toggle, model.getMessage());
@@ -227,46 +262,50 @@ public class ChessPanel extends JPanel {
             JOptionPane.showMessageDialog(toggle, model.getMessage());
         }
     }
-    // inner class that represents action listener for buttons
+
+
+    /**********************************************************************
+     * Inner class that represents listeners
+     **********************************************************************/
     private class listener implements ActionListener {
+
         public void actionPerformed(ActionEvent event) {
             model.threatChecks();
             if(event.getSource()== undo){
                 undo();
                 displayBoard();
-                
+
             }//end if
             else
-            
-                        
-            for (int r = 0; r < model.numRows(); r++)
-                for (int c = 0; c < model.numColumns(); c++)
-                    if (board[r][c] == event.getSource())
-                        if (firstTurnFlag == true) {
-                            fromRow = r;
-                            fromCol = c;
-                            firstTurnFlag = false;
-                        } else {
-                            toRow = r;
-                            toCol = c;
-                            firstTurnFlag = true;
-                            Move m = new Move(fromRow, fromCol, toRow, toCol);
-                            //check valid moves here
-                            if ((model.isValidMove(m)) == true) {
-                                model.copy();
-                                model.move(m);
-                                displayBoard();
-                                inCheck();
-                                
-                                
-                            }//end if
-                            
-                        }//end else
-                        
-                        model.resetBlack();
-                        model.resetWhite();
-                        
+
+                // iterates through board
+                for (int r = 0; r < model.numRows(); r++)
+                    for (int c = 0; c < model.numColumns(); c++)
+                        if (board[r][c] == event.getSource())
+                            if (firstTurnFlag) {
+                                fromRow = r;
+                                fromCol = c;
+                                firstTurnFlag = false;
+                            } else {
+                                toRow = r;
+                                toCol = c;
+                                firstTurnFlag = true;
+                                Move m = new Move(fromRow, fromCol, toRow, toCol);
+
+                                //check valid moves here
+                                if ((model.isValidMove(m))) {
+                                    model.copy();
+                                    model.move(m);
+                                    displayBoard();
+                                    inCheck();
+
+                                }//end if
+
+                            }//end else
+
+            model.resetBlack();
+            model.resetWhite();
+
         }//end actionPerformed
-        
     }//end Class listener
 }//end Class Chess Panel

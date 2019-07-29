@@ -1,6 +1,6 @@
 package chessprj;
 
 public enum GUIcodes {
-	NoMessage, NotYourTurn, inCheck, Checkmate
+    NoMessage, NotYourTurn, inCheck, Checkmate
 
 }
