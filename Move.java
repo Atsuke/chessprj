@@ -2,6 +2,7 @@ package chessprj;
 
 public class Move {
 	public int fromRow, fromColumn, toRow, toColumn;
+        public int moveValue;
 
 	public Move() {
 	}
@@ -13,6 +14,14 @@ public class Move {
 		this.toColumn = toColumn;
 	}
 
+        public void setMoveValue(int v){
+            moveValue = v;
+        }
+        
+        public int getMoveValue(){
+            return moveValue;
+        }
+        
 	@Override
 	public String toString() {
 		return "Move [fromRow=" + fromRow + ", fromColumn=" + fromColumn + ", toRow=" + toRow + ", toColumn=" + toColumn

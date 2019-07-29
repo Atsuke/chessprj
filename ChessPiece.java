@@ -3,7 +3,7 @@ package chessprj;
 public abstract class ChessPiece implements IChessPiece {
 
         private Player owner;
-        private int strategicValue = 1;
+        private int strategicValue;
         protected static ChessModel model;
         boolean firstMove = true;
         
@@ -25,8 +25,11 @@ public abstract class ChessPiece implements IChessPiece {
             
         }//end copy
         
+        public void setStrategicValue(int s){
+            strategicValue = s;
+        }
         public int strategicValue(){
-            return strategicValue;
+            return this.strategicValue;
         }
         
 	public boolean isValidMove(Move move, IChessPiece[][] board) {

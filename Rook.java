@@ -2,12 +2,12 @@ package chessprj;
 
 public class Rook extends ChessPiece {
 
-    private int strategicValue = 5;
+    
     
 	public Rook(Player player, ChessModel model) {
 		
 		super(player, model);
-		
+		setStrategicValue(5);
 	}
 
 	public String type() {

@@ -65,7 +65,7 @@ public class ChessModel implements IChessModel {
                     temp = this.copyModel();
                     temp.copy();
                     temp.move(check);
-                     if(temp.inCheck()==false){
+                     if(temp.inCheck() == false){
                          over = false;
                          break;
                      }
@@ -88,7 +88,7 @@ public class ChessModel implements IChessModel {
                     temp = this.copyModel();
                     temp.copy();
                     temp.move(check);
-                     if(temp.inCheck()==false){
+                     if(temp.inCheck() == false){
                          over = false;
                          break;
                      }
@@ -109,6 +109,31 @@ public class ChessModel implements IChessModel {
             return this;
         }
         
+        public Move calcBlackBestMove(Move m){
+            Move best = new Move();
+            getAllWhiteMoves();
+            getAllBlackMoves();
+            threatChecks();
+             ChessModel temp = new ChessModel();
+             temp = this.copyModel();
+             temp.copy();
+             for(Move check: whiteThreats){
+                    blackMoves.add(check);
+                }//end for
+             
+             for(Move check: blackMoves){
+                 if(temp.pieceAt(check.toRow, check.toColumn) == null){
+                     check.setMoveValue(0);
+                 }
+                 else{
+                     check.setMoveValue(temp.pieceAt(check.toRow, check.toColumn).strategicValue());
+                 }
+             }
+                 
+             
+            return best;
+        }
+        
 	public boolean isValidMove(Move move) {
 		boolean valid = false;
                 
@@ -122,9 +147,11 @@ public class ChessModel implements IChessModel {
 	}
 
 	public void move(Move move) {
-           
-            pieceAt(move.fromRow,move.fromColumn).setFirstMove(false);
-		board[move.toRow][move.toColumn] =  board[move.fromRow][move.fromColumn];
+            if(board[move.fromRow][move.fromColumn] != null && board[move.fromRow][move.fromColumn].firstMove == true){
+                board[move.fromRow][move.fromColumn].setFirstMove(false);
+        }
+            
+                board[move.toRow][move.toColumn] =  board[move.fromRow][move.fromColumn];
 		board[move.fromRow][move.fromColumn] = null;
                 
 	}
@@ -254,11 +281,11 @@ public class ChessModel implements IChessModel {
         for(Move check: whiteMoves){
             
             if(pieceAt(check.fromRow, check.fromColumn) != null && pieceAt(check.fromRow, check.fromColumn).type().equals("Pawn")){
-                if(check.fromRow-1 > 0 && check.fromColumn-1>0){
+                if(check.fromRow-1 >= 0 && check.fromColumn -1 >= 0){
                  Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn -1);
                  blackThreats.add(temp);
                 }
-                if(check.fromRow-1 > 0 && check.fromColumn+1 < numColumns()){
+                if(check.fromRow -1 >= 0 && check.fromColumn +1 < numColumns()){
                   Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn +1);
                  blackThreats.add(temp2);
                 }
@@ -271,7 +298,7 @@ public class ChessModel implements IChessModel {
         for(Move check: blackMoves){
             
             if(pieceAt(check.fromRow, check.fromColumn) != null && pieceAt(check.fromRow, check.fromColumn).type().equals("Pawn")){
-                if(check.fromRow +1 < numRows() && check.fromColumn-1 > 0){
+                if(check.fromRow +1 < numRows() && check.fromColumn-1 >= 0){
                  Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow +1, check.fromColumn-1);
                  whiteThreats.add(temp);
                 }

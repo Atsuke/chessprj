@@ -2,10 +2,11 @@ package chessprj;
 
 public class Knight extends ChessPiece {
 
-    private int strategicValue = 3;
+    
     
 	public Knight(Player player, ChessModel model) {
 		super(player,model);
+                setStrategicValue(4);
 	}
 
 	public String type() {

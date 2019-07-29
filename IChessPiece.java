@@ -8,6 +8,7 @@ public interface IChessPiece {
 	 */
 	Player player();
         boolean firstMove = true;
+        int strategicValue = 0;
         
         void setFirstMove(boolean first);
 	/**
@@ -20,6 +21,7 @@ public interface IChessPiece {
         
          IChessPiece copy();
          
+         public int strategicValue();
          
             
          

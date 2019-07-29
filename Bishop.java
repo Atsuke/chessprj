@@ -3,10 +3,11 @@ package chessprj;
 public class Bishop extends ChessPiece {
     
     
-        private int strategicValue = 3;
+        
         
 	public Bishop(Player player, ChessModel model) {
 		super(player, model);
+                setStrategicValue(3);
 	}
 
 	public String type() {
