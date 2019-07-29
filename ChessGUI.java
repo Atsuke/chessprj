@@ -4,6 +4,13 @@ import java.awt.Dimension;
 
 import javax.swing.JFrame;
 
+/**********************************************************************
+ * GUI in which the Chess game is able to operate
+ *
+ * @author Mike Day and Gretchen Holzhauer
+ * @version July 28 2019
+ **********************************************************************/
+
 public class ChessGUI {
 
     public static void main(String[] args) {
@@ -17,6 +24,6 @@ public class ChessGUI {
         frame.setPreferredSize(new Dimension(800, 637));
         frame.pack();
         frame.setVisible(true);
-        
+
     }
 }
