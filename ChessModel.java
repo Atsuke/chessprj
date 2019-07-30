@@ -1,6 +1,7 @@
 package chessprj;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.Stack;
 
 /**********************************************************************
@@ -24,6 +25,7 @@ public class ChessModel implements IChessModel {
     private int kingRow, kingCol;
     private ArrayList<Integer> blackThreatRows = new ArrayList<>();
     private ArrayList<Integer> blackThreatCols = new ArrayList<>();
+    private Random rand = new Random();
 
     /**********************************************************************
      * Constructor for ChessModel
@@ -578,10 +580,10 @@ public class ChessModel implements IChessModel {
 //        // if white king is not in check
 //        if(!whiteInCheck){
 //
-//            // (attempt to put that white king into check)
+//
 //
 //        }
-//
+
         /*******************************************************
          * c. Determine if any of your pieces are in danger,
          *		i. Move them if you can.
@@ -631,16 +633,29 @@ public class ChessModel implements IChessModel {
                 }
             }
         }
+
+        /*******************************************************
+         * d. Move a piece (pawns first) forward toward opponent
+         *    king
+         *		i. check to see if that piece is in danger of
+         *		   being removed, if so, move a different piece.
+         ********************************************************/
+
+//        ArrayList<Move> moves = new ArrayList<>();
 //
-//        /*******************************************************
-//         * d. Move a piece (pawns first) forward toward opponent
-//         *    king
-//         *		i. check to see if that piece is in danger of
-//         *		   being removed, if so, move a different piece.
-//         ********************************************************/
+//        for(Move move : blackMoves){
 //
-//        whiteAttackMoves();
+//            IChessPiece piece = pieceAt(move.fromRow, move.fromColumn);
+//
+//            if(piece.type().equals("Pawn")){
+//                moves.add(move);
+//            }
+//        }
+//
+//        // executes random move from pawns move list
+//        move(moves.get(rand.nextInt(moves.size())));
+
+        move(blackMoves.get(rand.nextInt(blackMoves.size())));
 
     }
-
 }

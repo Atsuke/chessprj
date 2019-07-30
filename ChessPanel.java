@@ -273,7 +273,7 @@ public class ChessPanel extends JPanel {
             model.resetBlack();
             model.resetWhite();
             model.calcAttackMoves();
-            if(event.getSource()== undo){
+            if (event.getSource() == undo) {
                 undo();
                 displayBoard();
 
@@ -282,9 +282,15 @@ public class ChessPanel extends JPanel {
 
                 // iterates through board
                 for (int r = 0; r < model.numRows(); r++)
-                    for (int c = 0; c < model.numColumns(); c++)
+                    for (int c = 0; c < model.numColumns(); c++) {
+
+
+                        IChessPiece piece = model.pieceAt(r,c);
+
                         if (board[r][c] == event.getSource())
-                            if (firstTurnFlag) {
+
+                            // move only executes if on white piece (for turn taking)
+                            if (firstTurnFlag && piece != null && piece.player() == Player.WHITE) {
                                 fromRow = r;
                                 fromCol = c;
                                 firstTurnFlag = false;
@@ -302,6 +308,8 @@ public class ChessPanel extends JPanel {
 
                                     inCheck();
 
+                                    model.setNextPlayer();
+
                                     // calls for AI after each move
                                     // still need to implement turn taking
                                     model.AI();
@@ -311,6 +319,8 @@ public class ChessPanel extends JPanel {
                                 }//end if
 
                             }//end else
+                    }
+
 
             model.resetBlack();
             model.resetWhite();
