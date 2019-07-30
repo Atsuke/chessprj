@@ -270,6 +270,8 @@ public class ChessPanel extends JPanel {
     private class listener implements ActionListener {
 
         public void actionPerformed(ActionEvent event) {
+            model.resetBlack();
+            model.resetWhite();
             model.threatChecks();
             if(event.getSource()== undo){
                 undo();
@@ -298,11 +300,12 @@ public class ChessPanel extends JPanel {
                                     model.copy();
                                     model.move(m);
                                     displayBoard();
+                                   
                                     inCheck();
 
                                     // calls for AI after each move
                                     // still need to implement turn taking
-                                    model.AI();
+                                   // model.AI();
 
                                 }//end if
 

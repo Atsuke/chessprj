@@ -61,9 +61,8 @@ public class ChessModel implements IChessModel {
 
     public boolean isComplete() {
         boolean over = false;
-        getAllWhiteMoves();
-        getAllBlackMoves();
-        threatChecks();
+
+        
         ChessModel temp = new ChessModel();
 
         if(player == Player.WHITE){
@@ -111,7 +110,7 @@ public class ChessModel implements IChessModel {
             if(over)
                 msg = "GAME OVER: White wins.";
         }//end black if
-
+        
         return over;
     }//end isComplete
 
@@ -191,8 +190,38 @@ public class ChessModel implements IChessModel {
     public boolean inCheck() {
         boolean inCheck = false;
         blackInCheck = false;
-
-        threatChecks();
+       resetWhite();
+       resetBlack();
+       getAllBlackMoves();
+       getAllWhiteMoves();
+       threatChecks();
+       
+       /*
+       *
+       *Proposed changes to inCheck()
+       *
+       */
+//        for(Move check: blackThreats){
+//           if(pieceAt(check.toRow, check.toColumn) != null){
+//               if(pieceAt(check.toRow,check.toColumn).type().equals("King") && pieceAt(check.toRow,check.toColumn).player() == player.BLACK){
+//                   msg = "Black King in Check";
+//                   inCheck = true;
+//                        blackInCheck = true;
+//                        kingCol = check.toColumn;
+//                        kingRow = check.toRow;
+//               }
+//           }
+//        }
+//        
+//        for(Move check: whiteThreats){
+//           if(pieceAt(check.toRow, check.toColumn) != null){
+//               if(pieceAt(check.toRow,check.toColumn).type().equals("King") && pieceAt(check.toRow,check.toColumn).player() == player.WHITE){
+//                   msg = "White King in Check";
+//                   inCheck = true;
+//                    whiteIncheck = true;
+//               }
+//           }
+//        }
         for(int r=0; r<numRows(); r++)
             for(int c = 0; c<numColumns(); c++)
                 if(pieceAt(r,c) != null){
@@ -208,6 +237,9 @@ public class ChessModel implements IChessModel {
                                 }//end row/column check
 
                         }//end black player
+                        
+                        
+                        
                         else if(pieceAt(r,c).player()==Player.WHITE){
                             for(Move check: whiteThreats)
                                 if(check.toRow == r && check.toColumn == c){
@@ -218,7 +250,7 @@ public class ChessModel implements IChessModel {
                         }//end white player
                     }//end king if
                 }//end null if
-        return inCheck;
+      return inCheck;
     }//end inCheck
 
     public Player currentPlayer() {
@@ -314,47 +346,76 @@ public class ChessModel implements IChessModel {
      * Checks all potential threats for black and white pieces
      **********************************************************************/
     public void threatChecks(){
-
-        // first calculates all valid white and black moves
-        checkAllBlackMoves();
+        resetWhite();
+        resetBlack();
         checkAllWhiteMoves();
-
-        // checks for white moves
-        for(Move check: whiteMoves){
-
-            if(pieceAt(check.fromRow, check.fromColumn) != null && pieceAt(check.fromRow, check.fromColumn).type().equals("Pawn")){
-                if(check.fromRow-1 >= 0 && check.fromColumn -1 >= 0){
-                    Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn -1);
-                    blackThreats.add(temp);
-                }
-                if(check.fromRow -1 >= 0 && check.fromColumn +1 < numColumns()){
-                    Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow -1, check.fromColumn +1);
-                    blackThreats.add(temp2);
-                }
-            }//end if
-            else if(isValidMove(check)){
-                blackThreats.add(check);
-            }//end if
-        }//end for each
-
-        // checks for black moves
-        for(Move check: blackMoves){
-
-            if(pieceAt(check.fromRow, check.fromColumn) != null && pieceAt(check.fromRow, check.fromColumn).type().equals("Pawn")){
-                if(check.fromRow +1 < numRows() && check.fromColumn-1 >= 0){
-                    Move temp = new Move(check.fromRow, check.fromColumn, check.fromRow +1, check.fromColumn-1);
-                    whiteThreats.add(temp);
-                }
-                if(check.fromRow +1 < numRows() && check.fromColumn +1 < numRows()){
-                    Move temp2 = new Move(check.fromRow, check.fromColumn, check.fromRow +1, check.fromColumn +1);
-                    whiteThreats.add(temp2);
-                }
-            }//end if
-            else if(isValidMove(check)){
-                whiteThreats.add(check);
-            }//end if
-        }//end for each
-
+        checkAllBlackMoves();
+       
+        // first calculates all valid white and black moves
+        for(int i = 0; i < numRows(); i++){
+            for(int j = 0; j<numColumns(); j++){
+                if(pieceAt(i,j) != null && pieceAt(i,j).player() == Player.BLACK){
+                    for(int r = 0; r < numRows(); r++){
+                        for(int c = 0; c < numColumns(); c++){
+                             Move check = new Move(i,j,r,c);
+                            if(pieceAt(check.fromRow,check.fromColumn).type().equals("Pawn")){
+                             
+                                if(check.toRow == check.fromRow +1 && check.toColumn == check.fromColumn +1){
+                                    
+                                    whiteThreats.add(check);
+                                }//watch for index out of bounds
+                             
+                                if(check.toRow == check.fromRow +1 && check.toColumn == check.fromColumn -1){
+                                    
+                                    whiteThreats.add(check);
+                                }//watch for index out of bounds
+                                
+                            }//is it a pawn?
+                            
+                            else 
+                                
+                                    if(isValidMove(check)){
+                                        whiteThreats.add(check);
+                            }//end if
+                        }//end inner inner for
+                    }//end outer for
+                }//end black if
+            }//end inner for
+        }//end outer for
+        for(int i = 0; i < numRows(); i++){
+            for(int j = 0; j<numColumns(); j++){
+            if(pieceAt(i,j) != null && pieceAt(i,j).player() == Player.WHITE){
+                    for(int r=0; r<numRows();r++){
+                        for(int c=0; c<numColumns(); c++){
+                             Move check = new Move(i,j,r,c);
+                            if(pieceAt(i,j).type().equals("Pawn")){
+                             
+                                if(check.toRow == check.fromRow -1 && check.toColumn == check.fromColumn +1){
+                                    
+                                    blackThreats.add(check);
+                                }//watch for index out of bounds
+                             
+                                if(check.toRow == check.fromRow -1 && check.toColumn == check.fromColumn -1){
+                                    
+                                    blackThreats.add(check);
+                                }//watch for index out of bounds
+                                
+                            }//is it a pawn?
+                            
+                            else 
+                                
+                                if(isValidMove(check)){
+                                    blackThreats.add(check);
+                                    
+                            }//end if
+                        }//end inner inner for
+                    }//end outer for
+                }//end white if
+            }
+        }
+       
+        
+        
     }//end threatChecks
 
 
