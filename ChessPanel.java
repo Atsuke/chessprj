@@ -48,9 +48,9 @@ public class ChessPanel extends JPanel {
         toggle = new JToggleButton("Activate Skynet", false);
         createIcons();
 
-        JPanel boardpanel = new JPanel();
-        JPanel buttonpanel = new JPanel();
-        boardpanel.setLayout(new GridLayout(model.numRows(), model.numColumns(), 1, 1));
+        JPanel boardPanel = new JPanel();
+        JPanel buttonPanel = new JPanel();
+        boardPanel.setLayout(new GridLayout(model.numRows(), model.numColumns(), 1, 1));
 
         // creates the board of buttons
         for (int r = 0; r < model.numRows(); r++) {
@@ -65,17 +65,17 @@ public class ChessPanel extends JPanel {
 
                 setBackGroundColor(r, c);
 
-                boardpanel.add(board[r][c]);
+                boardPanel.add(board[r][c]);
             }//end inner for
         }//end outer for
 
         // adds the board and buttons
-        add(boardpanel, BorderLayout.WEST);
-        boardpanel.setPreferredSize(new Dimension(600, 600));
-        buttonpanel.setLayout(new GridLayout(2,1));
-        add(buttonpanel);
-        buttonpanel.add(toggle);
-        buttonpanel.add(undo);
+        add(boardPanel, BorderLayout.WEST);
+        boardPanel.setPreferredSize(new Dimension(600, 600));
+        buttonPanel.setLayout(new GridLayout(2,1));
+        add(buttonPanel);
+        buttonPanel.add(toggle);
+        buttonPanel.add(undo);
         undo.addActionListener(listener);
 
         firstTurnFlag = true;
@@ -272,7 +272,7 @@ public class ChessPanel extends JPanel {
         public void actionPerformed(ActionEvent event) {
             model.resetBlack();
             model.resetWhite();
-            model.threatChecks();
+            model.calcAttackMoves();
             if(event.getSource()== undo){
                 undo();
                 displayBoard();
@@ -299,13 +299,14 @@ public class ChessPanel extends JPanel {
 
                                     model.copy();
                                     model.move(m);
-                                    displayBoard();
-                                   
+
                                     inCheck();
 
                                     // calls for AI after each move
                                     // still need to implement turn taking
-                                   // model.AI();
+                                    model.AI();
+
+                                    displayBoard();
 
                                 }//end if
 

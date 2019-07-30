@@ -1,7 +1,5 @@
 package chessprj;
 
-import java.util.ArrayList;
-
 /**********************************************************************
  * Houses information about the King chess piece
  **********************************************************************/
@@ -68,14 +66,14 @@ public class King extends ChessPiece {
                 valid = true;
 
             if(player() == Player.BLACK){
-                for(Move check: model.blackThreats())
+                for(Move check: model.getWhiteAttackMoves())
                     if(move.toRow == check.toRow && move.toColumn == check.toColumn)
                         valid = false;
 
             }//end if
 
             if(player() == Player.WHITE){
-                for(Move check: model.whiteThreats())
+                for(Move check: model.getBlackAttackMoves())
                     if(move.toRow == check.toRow && move.toColumn == check.toColumn)
                         valid = false;
             }//end if
