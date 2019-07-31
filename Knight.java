@@ -1,27 +1,41 @@
 package chessprj;
 
-import java.util.ArrayList;
-
 /**********************************************************************
  * Houses information about the Knight chess piece
  **********************************************************************/
 
 public class Knight extends ChessPiece {
 
+    /**********************************************************************
+     * Constructor for knight piece
+     *
+     * @param player
+     * @param model
+     **********************************************************************/
     public Knight(Player player, ChessModel model) {
         super(player,model);
         setStrategicValue(4);
     }
 
+    /**********************************************************************
+     * @return piece type
+     **********************************************************************/
     public String type() {
         return "Knight";
     }
 
+    /**********************************************************************
+     * set first move
+     *
+     * @param first
+     **********************************************************************/
     public void setFirstMove(boolean first){
         firstMove = first;
-
     }//end setFirstMove
 
+    /**********************************************************************
+     * copies piece
+     **********************************************************************/
     @Override
     public IChessPiece copy(){
         Knight copy = new Knight(player(), model);
@@ -29,6 +43,13 @@ public class Knight extends ChessPiece {
         return copy;
     }
 
+    /**********************************************************************
+     * checks if a proposed move is valid
+     *
+     * @param move
+     * @param board
+     * @return true if move valid, else false
+     **********************************************************************/
     public boolean isValidMove(Move move, IChessPiece[][] board){
         boolean valid = false;
 
@@ -58,14 +79,8 @@ public class Knight extends ChessPiece {
                 if(move.toColumn == move.fromColumn-1 || move.toColumn == move.fromColumn+1)
                     valid = true;
 
-
-
-
-
         }//end check empty or opponent
 
         return valid;
-
     }
-
 }

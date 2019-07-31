@@ -8,7 +8,7 @@ import javax.swing.JFrame;
  * GUI in which the Chess game is able to operate
  *
  * @author Mike Day and Gretchen Holzhauer
- * @version July 28 2019
+ * @version July 30 2019
  **********************************************************************/
 
 public class ChessGUI {

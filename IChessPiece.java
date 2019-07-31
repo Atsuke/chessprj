@@ -1,7 +1,8 @@
 package chessprj;
 
-import java.util.ArrayList;
-
+/**********************************************************************
+ * IChessPiece interface for the ChessPiece
+ **********************************************************************/
 public interface IChessPiece {
 
     /*******************************************************************
@@ -10,7 +11,9 @@ public interface IChessPiece {
      * @return the player that owns this piece.
      *******************************************************************/
     Player player();
+
     boolean firstMove = true;
+
     int strategicValue = 0;
 
     void setFirstMove(boolean first);
@@ -24,7 +27,7 @@ public interface IChessPiece {
     String type();
 
     IChessPiece copy();
-    public int strategicValue();
+    int strategicValue();
 
     /*******************************************************************
      * Returns whether the piece at location {@code [move.fromRow,

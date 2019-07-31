@@ -1,14 +1,17 @@
 package chessprj;
 
-import java.util.ArrayList;
-
 /**********************************************************************
  * Houses information about the Pawn chess piece
  **********************************************************************/
 
 public class Pawn extends ChessPiece {
 
-
+    /**********************************************************************
+     * Constructor for pawn piece
+     *
+     * @param player
+     * @param model
+     **********************************************************************/
     public Pawn(Player player, ChessModel model) {
 
         super(player, model);
@@ -16,18 +19,25 @@ public class Pawn extends ChessPiece {
 
     }//end Constructor
 
+    /**********************************************************************
+     * @return piece type
+     **********************************************************************/
     public String type() {
-
         return "Pawn";
-
     }//end type
 
+    /**********************************************************************
+     * set first move
+     *
+     * @param first
+     **********************************************************************/
     public void setFirstMove(boolean first){
-
         firstMove = first;
-
     }//end setFirstMove
 
+    /**********************************************************************
+     * copies piece
+     **********************************************************************/
     @Override
     public IChessPiece copy(){
         Pawn copy = new Pawn(player(), model);
@@ -35,7 +45,13 @@ public class Pawn extends ChessPiece {
         return copy;
     }
 
-    // determines if the move is valid for a pawn piece
+    /**********************************************************************
+     * checks if a proposed move is valid
+     *
+     * @param move
+     * @param board
+     * @return true if move valid, else false
+     **********************************************************************/
     public boolean isValidMove(Move move, IChessPiece[][] board) {
 
         // makes sure the move is within the confines of the board

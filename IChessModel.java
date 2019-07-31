@@ -1,5 +1,8 @@
 package chessprj;
 
+/**********************************************************************
+ * IChessModel interface for the ChessModelClass
+ **********************************************************************/
 public interface IChessModel {
 
     /**

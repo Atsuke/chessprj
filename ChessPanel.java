@@ -11,6 +11,7 @@ import javax.swing.*;
 
 public class ChessPanel extends JPanel {
 
+    /** buttons */
     private JButton[][] board;
     private JButton undo;
     private ChessModel model;
@@ -32,14 +33,17 @@ public class ChessPanel extends JPanel {
     private ImageIcon bPawn;
     private ImageIcon bKnight;
 
+    /** extras */
     private boolean firstTurnFlag;
     private int fromRow;
     private int toRow;
     private int fromCol;
     private int toCol;
-
     private listener listener;
 
+    /**********************************************************************
+     * Constructor for chess panel class
+     **********************************************************************/
     public ChessPanel() {
         model = new ChessModel();
         board = new JButton[model.numRows()][model.numColumns()];
@@ -263,7 +267,6 @@ public class ChessPanel extends JPanel {
         }
     }
 
-
     /**********************************************************************
      * Inner class that represents listeners
      **********************************************************************/
@@ -320,7 +323,6 @@ public class ChessPanel extends JPanel {
 
                             }//end else
                     }
-
 
             model.resetBlack();
             model.resetWhite();

@@ -10,25 +10,44 @@ import java.util.Stack;
 
 public class ChessModel implements IChessModel {
 
+    /** boards */
     private IChessPiece[][] board;
     private IChessPiece[][] board2;
+
+    /** black and white possible moves */
     private ArrayList<Move> blackMoves = new ArrayList<>();
     private ArrayList<Move> whiteMoves = new ArrayList<>();
+
+    /** black and white attack moves */
     private ArrayList<Move> blackAttackMoves = new ArrayList<>();
     private ArrayList<Move> whiteAttackMoves = new ArrayList<>();
+
+    /** black threats and locations */
     private ArrayList<IChessPiece> blackThreats = new ArrayList<>();
     private ArrayList<Integer> blackThreatRows = new ArrayList<>();
     private ArrayList<Integer> blackThreatCols = new ArrayList<>();
+
+    /** white threats and locations */
     private ArrayList<IChessPiece> whiteThreats = new ArrayList<>();
     private ArrayList<Integer> whiteThreatRows = new ArrayList<>();
     private ArrayList<Integer> whiteThreatCols = new ArrayList<>();
-    private ArrayList<ChessModel> gameOver = new ArrayList<>();
+
+    /** king location */
+    private int kingRow, kingCol;
+
+    /** if kings are in check */
+    private boolean whiteInCheck, blackInCheck;
+
+    /** stack for undo */
     private Stack<IChessPiece[][]> undoStack;
+
+    /** extras */
     private Player player;
     private String msg;
-    private boolean whiteInCheck, blackInCheck;
-    private int kingRow, kingCol;
     private Random rand = new Random();
+
+    /**  */
+    private ArrayList<ChessModel> gameOver = new ArrayList<>();
 
     /**********************************************************************
      * Constructor for ChessModel
@@ -76,7 +95,7 @@ public class ChessModel implements IChessModel {
     public boolean isComplete() {
         boolean over = false;
 
-        ChessModel temp = new ChessModel();
+        ChessModel temp;
 
         if(player == Player.WHITE){
             for(Move check: whiteAttackMoves){
@@ -88,7 +107,7 @@ public class ChessModel implements IChessModel {
                 temp = this.copyModel();
                 temp.copy();
                 temp.move(check);
-                if(temp.inCheck() == false){
+                if(!temp.inCheck()){
                     over = false;
                     break;
                 }
@@ -111,7 +130,7 @@ public class ChessModel implements IChessModel {
                 temp = this.copyModel();
                 temp.copy();
                 temp.move(check);
-                if(temp.inCheck() == false){
+                if(!temp.inCheck()){
                     over = false;
                     break;
                 }
@@ -127,11 +146,10 @@ public class ChessModel implements IChessModel {
         return over;
     }//end isComplete
 
-
-    public ChessModel getModel(){
-        return this;
-    }
-
+    /**********************************************************************
+     * Calculates best move
+     * To be used in advanced AI
+     **********************************************************************/
     public Move calcBlackBestMove(Move m){
         Move best = new Move();
         getAllWhiteMoves();
@@ -152,7 +170,6 @@ public class ChessModel implements IChessModel {
                 check.setMoveValue(temp.pieceAt(check.toRow, check.toColumn).strategicValue());
             }
         }
-
         return best;
     }
 
@@ -177,6 +194,11 @@ public class ChessModel implements IChessModel {
         return valid;
     }
 
+    /**********************************************************************
+     * Executes a move
+     *
+     * @param move
+     **********************************************************************/
     public void move(Move move) {
 
         if(board[move.fromRow][move.fromColumn] != null && board[move.fromRow][move.fromColumn].firstMove == true){
@@ -189,6 +211,9 @@ public class ChessModel implements IChessModel {
         promotePawn();
     }
 
+    /**********************************************************************
+     * Copies board
+     **********************************************************************/
     public ChessModel copyModel(){
         ChessModel tempBoard = new ChessModel();//create new temporary board
         tempBoard.clearBoard();//delete everything on it so we can copy the real board to it
@@ -201,7 +226,6 @@ public class ChessModel implements IChessModel {
         }//end outer for
         return tempBoard;
     }//end copyModel
-
 
     /**********************************************************************
      * @return if a king is in check
@@ -239,25 +263,36 @@ public class ChessModel implements IChessModel {
         return inCheck;
     }//end inCheck
 
+    /**********************************************************************
+     * @return current player
+     **********************************************************************/
     public Player currentPlayer() {
         return player;
     }
 
+    /**********************************************************************
+     * @return number of rows
+     **********************************************************************/
     public int numRows() {
         return 8;
     }
 
+    /**********************************************************************
+     * @return number of columns
+     **********************************************************************/
     public int numColumns() {
         return 8;
     }
 
+    /**********************************************************************
+     * Clears the board
+     **********************************************************************/
     private void clearBoard(){
         for(int x = 0; x < numRows(); x++){
             for(int y = 0; y < numColumns(); y++){
                 setPiece(x,y,null);
             }
         }
-
     }//end clear board
 
     /**********************************************************************
@@ -266,7 +301,6 @@ public class ChessModel implements IChessModel {
     public IChessPiece pieceAt(int row, int column) {
         return board[row][column];
     }
-
 
     /**********************************************************************
      * Copies board
@@ -432,24 +466,6 @@ public class ChessModel implements IChessModel {
     }//end getMessage
 
     /**********************************************************************
-     * Getter for all possible white moves
-     *
-     * @return white moves
-     **********************************************************************/
-    public ArrayList<Move> whiteMoves(){
-        return whiteMoves;
-    }
-
-    /**********************************************************************
-     * Getter for all possible black moves
-     *
-     * @return black moves
-     **********************************************************************/
-    public ArrayList<Move> blackMoves(){
-        return blackMoves;
-    }
-
-    /**********************************************************************
      * Getter for all white threats
      *
      * @return white threats
@@ -494,7 +510,9 @@ public class ChessModel implements IChessModel {
         board[row][column] = piece;
     }
 
-    // for turn-taking
+    /**********************************************************************
+     * Alternates player for turn-taking purposes
+     **********************************************************************/
     public void setNextPlayer() {
         player = player.next();
     }

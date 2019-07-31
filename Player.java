@@ -1,5 +1,8 @@
 package chessprj;
 
+/**********************************************************************
+ * Holds information about the player
+ **********************************************************************/
 public enum Player {
     BLACK, WHITE;
 

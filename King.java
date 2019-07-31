@@ -6,20 +6,36 @@ package chessprj;
 
 public class King extends ChessPiece {
 
+    /**********************************************************************
+     * Constructor for king piece
+     *
+     * @param player
+     * @param model
+     **********************************************************************/
     public King(Player player, ChessModel model) {
         super(player,model);
         setStrategicValue(500);
     }
 
+    /**********************************************************************
+     * @return piece type
+     **********************************************************************/
     public String type() {
         return "King";
     }
 
+    /**********************************************************************
+     * set first move
+     *
+     * @param first
+     **********************************************************************/
     public void setFirstMove(boolean first){
         firstMove = first;
-
     }//end setFirstMove
 
+    /**********************************************************************
+     * copies piece
+     **********************************************************************/
     @Override
     public IChessPiece copy(){
         King copy = new King(player(), model);
@@ -27,6 +43,13 @@ public class King extends ChessPiece {
         return copy;
     }
 
+    /**********************************************************************
+     * checks if a proposed move is valid
+     *
+     * @param move
+     * @param board
+     * @return true if move valid, else false
+     **********************************************************************/
     public boolean isValidMove(Move move, IChessPiece[][] board) {
 
         // makes sure the move is within the confines of the board

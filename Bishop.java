@@ -1,27 +1,41 @@
 package chessprj;
 
-import java.util.ArrayList;
-
 /**********************************************************************
  * Houses information about the Bishop chess piece
  **********************************************************************/
 
 public class Bishop extends ChessPiece {
 
+    /**********************************************************************
+     * Constructor for bishop piece
+     *
+     * @param player
+     * @param model
+     **********************************************************************/
     public Bishop(Player player, ChessModel model) {
         super(player, model);
         setStrategicValue(3);
     }
 
+    /**********************************************************************
+     * @return piece type
+     **********************************************************************/
     public String type() {
         return "Bishop";
     }
 
+    /**********************************************************************
+     * set first move
+     *
+     * @param first
+     **********************************************************************/
     public void setFirstMove(boolean first){
         firstMove = first;
-
     }//end setFirstMove
 
+    /**********************************************************************
+     * copies piece
+     **********************************************************************/
     @Override
     public IChessPiece copy(){
         Bishop copy = new Bishop(player(), model);
@@ -29,6 +43,13 @@ public class Bishop extends ChessPiece {
         return copy;
     }
 
+    /**********************************************************************
+     * checks if a proposed move is valid
+     *
+     * @param move
+     * @param board
+     * @return true if move valid, else false
+     **********************************************************************/
     public boolean isValidMove(Move move, IChessPiece[][] board) {
 
         // makes sure the move is within the confines of the board

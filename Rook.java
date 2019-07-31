@@ -1,29 +1,41 @@
 package chessprj;
 
-import java.util.ArrayList;
-
 /**********************************************************************
  * Houses information about the Rook chess piece
  **********************************************************************/
 
 public class Rook extends ChessPiece {
 
+    /**********************************************************************
+     * Constructor for rook piece
+     *
+     * @param player
+     * @param model
+     **********************************************************************/
     public Rook(Player player, ChessModel model) {
         super(player, model);
         setStrategicValue(5);
     }
 
+    /**********************************************************************
+     * @return piece type
+     **********************************************************************/
     public String type() {
-
         return "Rook";
-
     }
 
+    /**********************************************************************
+     * set first move
+     *
+     * @param first
+     **********************************************************************/
     public void setFirstMove(boolean first){
         firstMove = first;
-
     }//end setFirstMove
 
+    /**********************************************************************
+     * copies piece
+     **********************************************************************/
     @Override
     public IChessPiece copy(){
         Rook copy = new Rook(player(), model);
@@ -31,12 +43,13 @@ public class Rook extends ChessPiece {
         return copy;
     }
 
-    /**************************************************************************
-     * isValidMove
-     * Determines if move is valid for rook piece. up/down left/right
-     * @param Move
-     * @param IChessPiece[][]
-     **************************************************************************/
+    /**********************************************************************
+     * checks if a proposed move is valid
+     *
+     * @param move
+     * @param board
+     * @return true if move valid, else false
+     **********************************************************************/
     public boolean isValidMove(Move move, IChessPiece[][] board) {
 
         // makes sure the move is within the confines of the board
@@ -83,14 +96,10 @@ public class Rook extends ChessPiece {
                             valid = false;
                     }//end for
                 }//Down
-
             }//end check empty or opponent
-
         }//end Horizontal moves
-
 
         return valid;
 
     }//end isValidMove
-
 }//end Class Rook
