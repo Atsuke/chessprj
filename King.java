@@ -29,7 +29,11 @@ public class King extends ChessPiece {
 
     public boolean isValidMove(Move move, IChessPiece[][] board) {
 
+        // makes sure the move is within the confines of the board
+        if(!isInBoard(move)) return false;
+
         boolean valid = false;
+
         //space is empty or occupied by opponent
         if(board[move.toRow][move.toColumn] == null || board[move.toRow][move.toColumn].player()!= player()){
 

@@ -38,6 +38,10 @@ public class Rook extends ChessPiece {
      * @param IChessPiece[][]
      **************************************************************************/
     public boolean isValidMove(Move move, IChessPiece[][] board) {
+
+        // makes sure the move is within the confines of the board
+        if(!isInBoard(move)) return false;
+
         boolean valid = false;
         int tempRow;
         int tempCol;

@@ -31,6 +31,10 @@ public class Queen extends ChessPiece {
     }
 
     public boolean isValidMove(Move move, IChessPiece[][] board) {
+
+        // makes sure the move is within the confines of the board
+        if(!isInBoard(move)) return false;
+
         Bishop move1 = new Bishop(board[move.fromRow][move.fromColumn].player(),model);
         Rook move2 = new Rook(board[move.fromRow][move.fromColumn].player(),model);
         return (move1.isValidMove(move, board) || move2.isValidMove(move, board));

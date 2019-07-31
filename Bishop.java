@@ -30,6 +30,10 @@ public class Bishop extends ChessPiece {
     }
 
     public boolean isValidMove(Move move, IChessPiece[][] board) {
+
+        // makes sure the move is within the confines of the board
+        if(!isInBoard(move)) return false;
+
         boolean valid = false;
 
         //Move in diagonal lines only

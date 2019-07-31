@@ -32,6 +32,14 @@ public abstract class ChessPiece implements IChessPiece {
         return this.strategicValue;
     }
 
+    protected boolean isInBoard(Move move){
+
+        // makes sure the  requested move is within the confines of the board
+        if(move.toRow < 0 || move.toRow > 7 || move.toColumn < 0 || move.toColumn > 7) return false;
+
+        return true;
+    }
+
     // abstracted due to the uniqueness of this method for each piece
     public abstract boolean isValidMove(Move move, IChessPiece[][] board);
 

@@ -12,19 +12,22 @@ public class ChessModel implements IChessModel {
 
     private IChessPiece[][] board;
     private IChessPiece[][] board2;
-    private ArrayList<Move> whiteMoves = new ArrayList<>();
     private ArrayList<Move> blackMoves = new ArrayList<>();
+    private ArrayList<Move> whiteMoves = new ArrayList<>();
     private ArrayList<Move> blackAttackMoves = new ArrayList<>();
     private ArrayList<Move> whiteAttackMoves = new ArrayList<>();
     private ArrayList<IChessPiece> blackThreats = new ArrayList<>();
-    private ArrayList<ChessModel> gameOverMan = new ArrayList<>();
+    private ArrayList<Integer> blackThreatRows = new ArrayList<>();
+    private ArrayList<Integer> blackThreatCols = new ArrayList<>();
+    private ArrayList<IChessPiece> whiteThreats = new ArrayList<>();
+    private ArrayList<Integer> whiteThreatRows = new ArrayList<>();
+    private ArrayList<Integer> whiteThreatCols = new ArrayList<>();
+    private ArrayList<ChessModel> gameOver = new ArrayList<>();
     private Stack<IChessPiece[][]> undoStack;
     private Player player;
     private String msg;
     private boolean whiteInCheck, blackInCheck;
     private int kingRow, kingCol;
-    private ArrayList<Integer> blackThreatRows = new ArrayList<>();
-    private ArrayList<Integer> blackThreatCols = new ArrayList<>();
     private Random rand = new Random();
 
     /**********************************************************************
@@ -181,6 +184,9 @@ public class ChessModel implements IChessModel {
         }
         board[move.toRow][move.toColumn] =  board[move.fromRow][move.fromColumn];
         board[move.fromRow][move.fromColumn] = null;
+
+        // promotes a pawn if there is a pawn to be promoted
+        promotePawn();
     }
 
     public ChessModel copyModel(){
@@ -261,6 +267,10 @@ public class ChessModel implements IChessModel {
         return board[row][column];
     }
 
+
+    /**********************************************************************
+     * Copies board
+     **********************************************************************/
     public void copy(){
         board2 = new IChessPiece[8][8];
         for(int x = 0; x < numRows(); x++){
@@ -493,16 +503,36 @@ public class ChessModel implements IChessModel {
      * Promotes pawns if they reach end of the board opposite the side
      * they started on
      **********************************************************************/
-    public void promotePawn(){
-        // may need pawn parameter??
-        // come back to this
-    }
+    private void promotePawn(){
 
+        // iterate through top and bottom rows
+        // looks for pawns from opposing side
+        for(int c = 0; c < 8; ++c){
+
+            // looks at top row
+            IChessPiece piece = pieceAt(0, c);
+
+            // checks if there is a piece there, and if it is a white pawn
+            if(piece != null && piece.player() == Player.WHITE && piece.type().equals("Pawn")){
+
+                // piece becomes a queen
+                board[0][c] = new Queen(Player.WHITE,this);
+            }
+
+            // looks at bottom row
+            piece = pieceAt(7, c);
+
+            // checks if there is a piece there, and if it is a black pawn
+            if(piece != null && piece.player() == Player.BLACK && piece.type().equals("Pawn")){
+
+                // piece becomes a queen
+                board[7][c] = new Queen(Player.BLACK,this);
+            }
+        }
+    }
 
     /**********************************************************************
      * Finds which black pieces are in immediate danger of capture
-     *
-     * @return ArrayList of black pieces in danger
      **********************************************************************/
     private void blackThreats(){
 
@@ -522,13 +552,38 @@ public class ChessModel implements IChessModel {
             if(piece.player() == Player.BLACK) {
 
                 blackThreats.add(piece);
-
                 blackThreatRows.add(move.toRow);
                 blackThreatCols.add(move.toColumn);
             }
         }
     }
 
+    /**********************************************************************
+     * Finds which white pieces are in immediate danger of capture
+     **********************************************************************/
+    private void whiteThreats(){
+
+        // makes sure lists are empty to start
+        whiteThreats.clear();
+        whiteThreatRows.clear();
+        whiteThreatCols.clear();
+
+        // iterates through cells where white can attack
+        for(Move move : blackAttackMoves){
+            IChessPiece piece = pieceAt(move.toRow, move.toColumn);
+
+            // checks if there are any pieces there
+            if(piece == null) continue;
+
+            // makes sure the piece is black
+            if(piece.player() == Player.WHITE) {
+
+                whiteThreats.add(piece);
+                whiteThreatRows.add(move.toRow);
+                whiteThreatCols.add(move.toColumn);
+            }
+        }
+    }
 
     /**********************************************************************
      * An AI method for the black pieces
@@ -541,10 +596,8 @@ public class ChessModel implements IChessModel {
     public void AI() {
 
         /*******************************************************
-         * Write a simple AI set of rules in the following order.
-         * a. Check to see if you are in check.
-         * 		i. If so, get out of check by moving the king or
-         * 		   placing a piece to block the check
+         * Checks if black king is in danger
+         * If so, moves king
          ********************************************************/
 
         // checks if black king is in check
@@ -570,33 +623,15 @@ public class ChessModel implements IChessModel {
             }
         }
 
-//        /*******************************************************
-//         * b. Attempt to put opponent into check (or checkmate).
-//         * 		i. Attempt to put opponent into check without
-//         * 	       losing your piece
-//         *		ii. Perhaps you have won the game.
-//         ********************************************************/
-//
-//        // if white king is not in check
-//        if(!whiteInCheck){
-//
-//
-//
-//        }
-
         /*******************************************************
-         * c. Determine if any of your pieces are in danger,
-         *		i. Move them if you can.
-         *		ii. Attempt to protect that piece.
+         * Checks if any black pieces are in danger
+         * If so, moves one of those pieces
          ********************************************************/
 
         // assesses if any black pieces are in danger
         blackThreats();
 
         if(!blackThreats.isEmpty()){
-
-            // gets whatever threatened piece is first in list
-           IChessPiece piece = blackThreats.get(0);
 
             // finding location of the threatened piece
             int pieceRow = blackThreatRows.get(0);
@@ -635,27 +670,37 @@ public class ChessModel implements IChessModel {
         }
 
         /*******************************************************
-         * d. Move a piece (pawns first) forward toward opponent
-         *    king
-         *		i. check to see if that piece is in danger of
-         *		   being removed, if so, move a different piece.
+         * Checks if any white pieces could be captured
+         * If so, captures them
+         ********************************************************/
+        // assesses if any white pieces are in danger
+        whiteThreats();
+
+        // checks if any white pieces can be captured
+        if(whiteThreats.size() != 0){
+
+            // iterates through all possible black attack moves
+            for(Move move : blackAttackMoves){
+
+                IChessPiece piece = pieceAt(move.toRow, move.toColumn);
+
+                // checks if there is a white piece in any place a black piece can attack
+                if(piece != null && piece.player() == Player.WHITE){
+
+                    // executes the move to capture the piece
+                    move(move);
+
+                    // exits if move is executed to prevent multiple moves
+                    return;
+                }
+            }
+        }
+
+        /*******************************************************
+         * Randomly moves a black piece if no previous conditions
+         * are met
          ********************************************************/
 
-//        ArrayList<Move> moves = new ArrayList<>();
-//
-//        for(Move move : blackMoves){
-//
-//            IChessPiece piece = pieceAt(move.fromRow, move.fromColumn);
-//
-//            if(piece.type().equals("Pawn")){
-//                moves.add(move);
-//            }
-//        }
-//
-//        // executes random move from pawns move list
-//        move(moves.get(rand.nextInt(moves.size())));
-
         move(blackMoves.get(rand.nextInt(blackMoves.size())));
-
     }
 }

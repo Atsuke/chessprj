@@ -37,6 +37,10 @@ public class Pawn extends ChessPiece {
 
     // determines if the move is valid for a pawn piece
     public boolean isValidMove(Move move, IChessPiece[][] board) {
+
+        // makes sure the move is within the confines of the board
+        if(!isInBoard(move)) return false;
+
         boolean valid = false;
 
         //white ifs
