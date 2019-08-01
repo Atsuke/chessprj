@@ -89,6 +89,18 @@ public class ChessModel implements IChessModel {
 
     }//end chessModel
 
+
+    /**********************************************************************
+     * Places a piece
+     *
+     * @param piece
+     * @param r
+     * @param c
+     **********************************************************************/
+    public void placePiece(IChessPiece piece, int r, int c){
+        board[r][c] = piece;
+    }
+
     /**********************************************************************
      * @return if game is complete or not
      **********************************************************************/
@@ -287,7 +299,7 @@ public class ChessModel implements IChessModel {
     /**********************************************************************
      * Clears the board
      **********************************************************************/
-    private void clearBoard(){
+    public void clearBoard(){
         for(int x = 0; x < numRows(); x++){
             for(int y = 0; y < numColumns(); y++){
                 setPiece(x,y,null);
@@ -552,7 +564,7 @@ public class ChessModel implements IChessModel {
     /**********************************************************************
      * Finds which black pieces are in immediate danger of capture
      **********************************************************************/
-    private void blackThreats(){
+    public void blackThreats(){
 
         // makes sure lists are empty to start
         blackThreats.clear();
@@ -577,9 +589,18 @@ public class ChessModel implements IChessModel {
     }
 
     /**********************************************************************
+     * Getter for blackThreats
+     *
+     * @return blackThreats
+     **********************************************************************/
+    public ArrayList<IChessPiece> getBlackThreats(){
+        return blackThreats;
+    }
+
+    /**********************************************************************
      * Finds which white pieces are in immediate danger of capture
      **********************************************************************/
-    private void whiteThreats(){
+    public void whiteThreats(){
 
         // makes sure lists are empty to start
         whiteThreats.clear();
@@ -601,6 +622,15 @@ public class ChessModel implements IChessModel {
                 whiteThreatCols.add(move.toColumn);
             }
         }
+    }
+
+    /**********************************************************************
+     * Getter for whiteThreats
+     *
+     * @return whiteThreats
+     **********************************************************************/
+    public ArrayList<IChessPiece> getWhiteThreats(){
+        return whiteThreats;
     }
 
     /**********************************************************************
@@ -680,9 +710,6 @@ public class ChessModel implements IChessModel {
 
                     // exits method if moves is made to prevent multiple moves
                     return;
-
-                    // this doesn't account for if this move is actually going to keep it out of
-                    // danger or not
                 }
             }
         }
@@ -695,7 +722,7 @@ public class ChessModel implements IChessModel {
         whiteThreats();
 
         // checks if any white pieces can be captured
-        if(whiteThreats.size() != 0){
+        if(!whiteThreats.isEmpty()){
 
             // iterates through all possible black attack moves
             for(Move move : blackAttackMoves){

@@ -9,7 +9,8 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author Atsuke
+ * @author Mike Day and Gretchen Holzhauer
+ * @version July 31 2019
  */
 public class ChessTest {
 
@@ -723,6 +724,98 @@ public class ChessTest {
 
     }//end knightCapture8
 
+    /******************************************************************************
+     *
+     * King Tests
+     *
+     *******************************************************************************/
+
+    @Test
+    public void kingMoveUp(){
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new King(Player.WHITE, test), 4, 4);
+        Move move = new Move(4, 4, 3, 4);
+        test.move(move);
+
+        assertTrue(test.pieceAt(3,4).type().equals("King"));
+        assertTrue(test.pieceAt(3,4).player() == Player.WHITE);
+    }
+
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void kingMoveOffBoard(){
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new King(Player.WHITE, test), 4, 7);
+        Move move = new Move(4, 7, 4,8);
+
+        // tries to move off board, should throw IndexOutOfBoundsException
+        test.move(move);
+    }
+
+    @Test
+    public void kingCaptureFoe(){
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new King(Player.WHITE, test), 4, 4);
+        test.placePiece(new Rook(Player.BLACK, test), 4, 5);
+
+        Move move = new Move(4, 4, 4, 5);
+        test.move(move);
+
+        // makes sure white king is now in black rook's place (because it captured it)
+        assertTrue(test.pieceAt(4,5).type().equals("King"));
+        assertTrue(test.pieceAt(4,5).player() == Player.WHITE);
+
+    }
+
+    @Test
+    public void kingInCheck() {
+
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new King(Player.WHITE, test), 4, 4);
+        test.placePiece(new Rook(Player.BLACK, test), 4, 5);
+
+        // makes sure king is in check
+        assertTrue(test.inCheck());
+
+    }
+
+    @Test
+    public void kingMoveItselfIntoCheck1() {
+
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new King(Player.WHITE, test), 4, 1);
+        test.placePiece(new Pawn(Player.BLACK, test), 2, 1);
+
+        test.calcAttackMoves();
+        Move move = new Move(4, 1, 3, 0);
+
+        assertFalse(test.isValidMove(move));
+    }
+
+    @Test
+    public void kingMoveItselfIntoCheck2() {
+
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new King(Player.BLACK, test), 3, 1);
+        test.placePiece(new Pawn(Player.WHITE, test), 4, 1);
+
+        test.calcAttackMoves();
+        Move move = new Move(3, 1, 3, 0);
+
+        assertFalse(test.isValidMove(move));
+    }
+
+    /******************************************************************************
+     *
+     * Array Tests
+     *
+     *******************************************************************************/
+
     @Test
     public void arrayTest(){
 
@@ -741,31 +834,89 @@ public class ChessTest {
 
     }//end arrayTest
 
-    @Test
-    public void threatTest1(){
-        ChessModel testModel = new ChessModel();
-       // assertTrue(testModel.isThreatened(2, 1)==true);
-
-    }//end threatTest1
-
-    @Test
-    public void threatTest2(){
-        ChessModel testModel = new ChessModel();
-        //assertTrue(testModel.isThreatened(3, 1)==true);
-
-    }//end threatTest2
+    /******************************************************************************
+     *
+     * Pawn Promotion Tests
+     *
+     *******************************************************************************/
 
     @Test
-    public void threatTest3(){
-        ChessModel testModel = new ChessModel();
-        testModel.setPiece(4, 3, new Knight(Player.BLACK,testModel));
-        //assertTrue(testModel.isThreatened(6, 4)==true);
+    public void testWhitePawnPromotion(){
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new Pawn(Player.WHITE, test), 1, 1);
+        test.move(new Move(1, 1, 0, 1));
 
-    }//end threatTest3
+        IChessPiece piece = test.pieceAt(0,1);
 
+        assertTrue(piece.type().equals("Queen"));
+        assertTrue(piece.player() == Player.WHITE);
+    }
 
+    @Test
+    public void testBlackPawnPromotion(){
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new Pawn(Player.BLACK, test), 6, 1);
+        test.move(new Move(6, 1, 7, 1));
 
+        IChessPiece piece = test.pieceAt(7,1);
 
+        assertTrue(piece.type().equals("Queen"));
+        assertTrue(piece.player() == Player.BLACK);
 
+    }
+
+    /******************************************************************************
+     *
+     * Threat Tests
+     *
+     *******************************************************************************/
+
+    @Test
+    public void testWhiteThreats(){
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new Bishop(Player.WHITE, test), 4, 4);
+        test.placePiece(new Rook(Player.BLACK, test), 4, 5);
+        test.calcAttackMoves();
+        test.whiteThreats();
+
+        assertTrue(test.getWhiteThreats().size() == 1);
+    }
+
+    @Test
+    public void testBlackThreats(){
+        ChessModel test = new ChessModel();
+        test.clearBoard();
+        test.placePiece(new Bishop(Player.BLACK, test), 4, 4);
+        test.placePiece(new Rook(Player.WHITE, test), 4, 5);
+        test.calcAttackMoves();
+        test.blackThreats();
+
+        assertTrue(test.getBlackThreats().size() == 1);
+    }
+
+    /******************************************************************************
+     *
+     * Getting Attack Moves Tests
+     *
+     *******************************************************************************/
+
+    @Test
+    public void getBlackAttackMovesTest(){
+        ChessModel test = new ChessModel();
+        test.calcAttackMoves();
+
+        assertTrue(test.getBlackAttackMoves().size() == 18);
+    }
+
+    @Test
+    public void getWhiteAttackMovesTest(){
+        ChessModel test = new ChessModel();
+        test.calcAttackMoves();
+
+        assertTrue(test.getWhiteAttackMoves().size() == 18);
+    }
 
 }//end Class Chess Test
